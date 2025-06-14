@@ -88,7 +88,9 @@ def stitch_videos(video_paths):
 
 @app.route("/translate", methods=["POST"])
 def translate():
+
     data = request.json
+    print(data)
     if not data or "text" not in data:
         return jsonify({"error": 'Missing "text" in JSON payload'}), 400
 
