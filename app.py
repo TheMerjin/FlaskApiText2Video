@@ -7,6 +7,7 @@ import re
 from moviepy import VideoFileClip, concatenate_videoclips
 import tempfile
 import uuid
+import re
 
 from flask_cors import CORS
 
@@ -103,7 +104,7 @@ def translate():
         return jsonify({"error": 'Missing "text" in JSON payload'}), 400
 
     text = data["text"].upper()
-
+    text = re.sub(r"\s+", "", text)
     # Validate text
     is_valid, error_message = validate_text(text)
     if not is_valid:
