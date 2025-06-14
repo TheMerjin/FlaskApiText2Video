@@ -78,8 +78,12 @@ def stitch_videos(video_paths):
             if random.random() < 0.01:
                 print(path)
             print("About to get the full path")
+            print(f"Trying to load: {full_path}")
             full_path = os.path.abspath(path)
+            print(f"Trying to load: {full_path}")
             full_path = path.replace("/videos/videos/", "/videos/", 1)
+            print(f"Trying to load: {full_path}")
+
             print("VideoFiling the clip")
             print(f"Trying to load: {full_path}")
             assert os.path.exists(full_path), f"File does not exist: {full_path}"
@@ -183,4 +187,5 @@ def serve_video(filename):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
