@@ -38,8 +38,7 @@ def load_video_mapping():
 
                 video_path = os.path.join("videos", fixed_path)
 
-                if random.random() < 0.1:
-                    print("Mapped:", letter, "→", video_path)
+                print("Mapped:", letter, "→", video_path)
 
                 mapping[letter] = video_path
     except FileNotFoundError:
