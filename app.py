@@ -62,17 +62,19 @@ def stitch_videos(video_paths):
         # Load all video clips
         clips = []
         for path in video_paths:
+            print("About to get the full path")
             full_path = os.path.join(VIDEO_BASE_PATH, path)
+            print("VideoFiling the clip")
             clip = VideoFileClip(full_path)
             clips.append(clip)
-
+        print("Final clip about to be made")
         # Concatenate all clips
         final_clip = concatenate_videoclips(clips)
 
         # Create a temporary file for the output
         temp_dir = tempfile.gettempdir()
         output_path = os.path.join(temp_dir, f"{uuid.uuid4()}.mp4")
-
+        print("Writing")
         # Write the result to the temporary file
         final_clip.write_videofile(output_path, codec="libx264", audio_codec="aac")
 
