@@ -28,7 +28,8 @@ def load_video_mapping():
             for row in reader:
                 letter = row["words"].upper()
                 video_path = os.path.join(
-                    "videos", row["path"].replace(".pose", ".mp4")
+                    "videos",
+                    row["path"].replace(".pose", ".mp4").replace("ase", "videos"),
                 )
                 mapping[letter] = video_path
     except FileNotFoundError:
