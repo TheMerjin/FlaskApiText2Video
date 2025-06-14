@@ -79,6 +79,7 @@ def stitch_videos(video_paths):
                 print(path)
             print("About to get the full path")
             full_path = os.path.abspath(path)
+            full_path = path.replace("/videos/videos/", "/videos/", 1)
             print("VideoFiling the clip")
             print(f"Trying to load: {full_path}")
             assert os.path.exists(full_path), f"File does not exist: {full_path}"
