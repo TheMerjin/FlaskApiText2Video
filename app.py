@@ -61,7 +61,7 @@ def stitch_videos(video_paths):
         # Load all video clips
         clips = []
         for path in video_paths:
-            full_path = os.path.join(VIDEO_BASE_PATH, "ase", path)
+            full_path = os.path.join(VIDEO_BASE_PATH, path)
             clip = VideoFileClip(full_path)
             clips.append(clip)
 
