@@ -92,6 +92,7 @@ def translate():
     data = request.json
     print(data)
     if not data or "text" not in data:
+        print("error: Missing text in JSON payload")
         return jsonify({"error": 'Missing "text" in JSON payload'}), 400
 
     text = data["text"].upper()
@@ -99,6 +100,7 @@ def translate():
     # Validate text
     is_valid, error_message = validate_text(text)
     if not is_valid:
+        print(f"error: {error_message}")
         return jsonify({"error": error_message}), 400
 
     try:
