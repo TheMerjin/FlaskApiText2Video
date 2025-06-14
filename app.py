@@ -4,6 +4,9 @@ import csv
 from functools import lru_cache
 from werkzeug.utils import secure_filename
 import re
+from moviepy import VideoFileClip, concatenate_videoclips
+import tempfile
+import uuid
 
 app = Flask(__name__)
 
@@ -40,13 +43,38 @@ def validate_text(text):
     if len(text) > MAX_TEXT_LENGTH:
         return False, f"Text length exceeds maximum limit of {MAX_TEXT_LENGTH} characters"
     if not all(char in ALLOWED_CHARS for char in text):
-        return False, "Text contains invalid characters. Only letters and spaces are allowed"
+        return False, "Text contains invalid characters. Only letters are allowed"
     return True, None
 
-@lru_cache(maxsize=100)
-def get_video_paths(text):
-    """Get video paths for text with caching."""
-    return [mapping[char] for char in text if char in mapping]
+def stitch_videos(video_paths):
+    """Stitch multiple videos together."""
+    try:
+        # Load all video clips
+        clips = []
+        for path in video_paths:
+            full_path = os.path.join(VIDEO_BASE_PATH, "ase", path)
+            clip = VideoFileClip(full_path)
+            clips.append(clip)
+        
+        # Concatenate all clips
+        final_clip = concatenate_videoclips(clips)
+        
+        # Create a temporary file for the output
+        temp_dir = tempfile.gettempdir()
+        output_path = os.path.join(temp_dir, f"{uuid.uuid4()}.mp4")
+        
+        # Write the result to the temporary file
+        final_clip.write_videofile(output_path, codec='libx264', audio_codec='aac')
+        
+        # Close all clips to free up resources
+        final_clip.close()
+        for clip in clips:
+            clip.close()
+            
+        return output_path
+    except Exception as e:
+        app.logger.error(f"Error stitching videos: {str(e)}")
+        raise
 
 @app.route("/translate", methods=["POST"])
 def translate():
@@ -62,17 +90,24 @@ def translate():
         return jsonify({"error": error_message}), 400
 
     try:
-        # Get video paths with caching
-        video_files = get_video_paths(text)
+        # Get video paths
+        video_files = [mapping[char] for char in text if char in mapping]
         
         # Check if all characters have mappings
         if len(video_files) != len(text):
             missing_chars = set(text) - set(mapping.keys())
             return jsonify({"error": f"No video mapping for characters: {', '.join(missing_chars)}"}), 400
 
-        # Generate video URLs
-        video_urls = [f"/video/{os.path.basename(path)}" for path in video_files]
-        return jsonify({"videos": video_urls})
+        # Stitch videos together
+        stitched_video_path = stitch_videos(video_files)
+        
+        # Return the video file
+        return send_file(
+            stitched_video_path,
+            mimetype="video/mp4",
+            as_attachment=True,
+            download_name="sign_language.mp4"
+        )
 
     except Exception as e:
         app.logger.error(f"Error processing translation request: {str(e)}")
