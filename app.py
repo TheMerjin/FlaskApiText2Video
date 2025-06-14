@@ -27,12 +27,19 @@ def load_video_mapping():
             reader = csv.DictReader(csvfile)
             for row in reader:
                 letter = row["words"].upper()
-                video_path = os.path.join(
-                    "videos",
-                    row["path"].replace(".pose", ".mp4").replace("ase", "videos"),
-                )
-                if random.random() < 0.01:
-                    print(video_path)
+                raw_path = row["path"].replace(".pose", ".mp4")
+
+                # Fix the doubling issue
+                # This replaces only 'ase/' or 'ase\' with 'videos/' safely
+                fixed_path = re.sub(r"[/\\]?ase[/\\]", "videos/", raw_path)
+
+                # If it still doesn't work, use this safer alternative:
+                # fixed_path = raw_path.replace("ase/", "videos/").replace("ase\\", "videos\\")
+
+                video_path = os.path.join("videos", fixed_path)
+
+                if random.random() < 0.1:
+                    print("Mapped:", letter, "→", video_path)
 
                 mapping[letter] = video_path
     except FileNotFoundError:
