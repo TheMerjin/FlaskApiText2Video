@@ -35,9 +35,7 @@ def load_video_mapping():
 
                 # If it still doesn't work, use this safer alternative:
                 # fixed_path = raw_path.replace("ase/", "videos/").replace("ase\\", "videos\\")
-
-                video_path = os.path.join("videos", fixed_path)
-
+                video_path = fixed_path
                 print("Mapped:", letter, "→", video_path)
 
                 mapping[letter] = video_path
@@ -78,7 +76,6 @@ def stitch_videos(video_paths):
             if random.random() < 0.01:
                 print(path)
             print("About to get the full path")
-            print(f"Trying to load: {full_path}")
             full_path = os.path.abspath(path)
             print(f"Trying to load: {full_path}")
             full_path = path.replace("/videos/videos/", "/videos/", 1)
