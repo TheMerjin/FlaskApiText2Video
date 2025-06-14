@@ -57,6 +57,7 @@ def validate_text(text):
 
 def stitch_videos(video_paths):
     """Stitch multiple videos together."""
+    print("Stitching...")
     try:
         # Load all video clips
         clips = []
@@ -118,10 +119,10 @@ def translate():
                 ),
                 400,
             )
-
+        print("Stithing videos together")
         # Stitch videos together
         stitched_video_path = stitch_videos(video_files)
-
+        print("Stiched videos together")
         # Return the video file
         return send_file(
             stitched_video_path,
