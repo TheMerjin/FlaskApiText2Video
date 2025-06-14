@@ -4,7 +4,7 @@ import csv
 from functools import lru_cache
 from werkzeug.utils import secure_filename
 import re
-from moviepy import VideoFileClip, concatenate_videoclips
+from moviepy import VideoClip, concatenate_videoclips
 import tempfile
 import uuid
 
@@ -61,7 +61,7 @@ def stitch_videos(video_paths):
         clips = []
         for path in video_paths:
             full_path = os.path.join(VIDEO_BASE_PATH, "ase", path)
-            clip = VideoFileClip(full_path)
+            clip = VideoClip(full_path)
             clips.append(clip)
 
         # Concatenate all clips
