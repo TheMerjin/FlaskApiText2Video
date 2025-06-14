@@ -151,7 +151,7 @@ def serve_video(filename):
         abort(400, description="Invalid filename")
 
     # Construct full path
-    full_path = os.path.join(VIDEO_BASE_PATH, "ase", secure_name)
+    full_path = os.path.join(VIDEO_BASE_PATH, "videos", secure_name)
 
     if not os.path.exists(full_path):
         abort(404, description="Video not found")
