@@ -8,9 +8,10 @@ from moviepy import VideoClip, concatenate_videoclips
 import tempfile
 import uuid
 
+from flask_cors import CORS
 
 app = Flask(__name__)
-
+CORS(app)
 # Constants
 VIDEO_BASE_PATH = os.path.abspath("")
 MAX_TEXT_LENGTH = 100  # Maximum allowed text length
