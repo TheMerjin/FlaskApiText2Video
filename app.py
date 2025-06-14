@@ -26,7 +26,9 @@ def load_video_mapping():
             reader = csv.DictReader(csvfile)
             for row in reader:
                 letter = row["words"].upper()
-                video_path = row["path"].replace(".pose", ".mp4")
+                video_path = os.path.join(
+                    "videos", row["path"].replace(".pose", ".mp4")
+                )
                 mapping[letter] = video_path
     except FileNotFoundError:
         app.logger.error("data.csv file not found")
@@ -63,7 +65,7 @@ def stitch_videos(video_paths):
         clips = []
         for path in video_paths:
             print("About to get the full path")
-            full_path = os.path.join(VIDEO_BASE_PATH, path)
+            full_path = os.path.abspath(path)
             print("VideoFiling the clip")
             print(f"Trying to load: {full_path}")
             assert os.path.exists(full_path), f"File does not exist: {full_path}"
