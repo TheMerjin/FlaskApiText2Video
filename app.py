@@ -8,7 +8,7 @@ from moviepy import VideoFileClip, concatenate_videoclips
 import tempfile
 import uuid
 import re
-
+import random
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -31,6 +31,9 @@ def load_video_mapping():
                     "videos",
                     row["path"].replace(".pose", ".mp4").replace("ase", "videos"),
                 )
+                if random.random() < 0.01:
+                    print(video_path)
+
                 mapping[letter] = video_path
     except FileNotFoundError:
         app.logger.error("data.csv file not found")
@@ -66,6 +69,8 @@ def stitch_videos(video_paths):
         # Load all video clips
         clips = []
         for path in video_paths:
+            if random.random() < 0.01:
+                print(path)
             print("About to get the full path")
             full_path = os.path.abspath(path)
             print("VideoFiling the clip")
