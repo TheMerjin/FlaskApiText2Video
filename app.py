@@ -65,6 +65,8 @@ def stitch_videos(video_paths):
             print("About to get the full path")
             full_path = os.path.join(VIDEO_BASE_PATH, path)
             print("VideoFiling the clip")
+            print(f"Trying to load: {full_path}")
+            assert os.path.exists(full_path), f"File does not exist: {full_path}"
             clip = VideoFileClip(full_path)
             clips.append(clip)
         print("Final clip about to be made")
