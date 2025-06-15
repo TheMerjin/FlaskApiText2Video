@@ -107,7 +107,7 @@ def translate():
     text = data["text"].upper()
     # Remove all whitespace and punctuation — keep only letters A-Z
     text = re.sub(r"[^A-Z]", "", text)
-
+    text = re.sub(r" ", "", text)
     is_valid, error_message = validate_text(text)
     if not is_valid:
         return jsonify({"error": error_message}), 400
