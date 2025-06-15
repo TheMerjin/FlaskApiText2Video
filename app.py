@@ -95,6 +95,9 @@ def stitch_videos_from_text(text, mapping):
     return output_path
 
 
+import string
+
+
 @app.route("/translate", methods=["POST"])
 def translate():
     data = request.json
@@ -102,7 +105,8 @@ def translate():
         return jsonify({"error": 'Missing "text" in JSON payload'}), 400
 
     text = data["text"].upper()
-    text = re.sub(r"\s+", "", text)
+    # Remove all whitespace and punctuation — keep only letters A-Z
+    text = re.sub(r"[^A-Z]", "", text)
 
     is_valid, error_message = validate_text(text)
     if not is_valid:
